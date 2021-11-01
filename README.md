@@ -5,6 +5,4 @@ This project was created for the UCF course CDA 3103C (Computer Logic & Organiza
 
 
 # Contributors
-Brandon Magloire
-Evan Agustin Verdu
-Noah Carrier
+Brandon Magloire, Evan Agustin Verdu, Noah Carrier
