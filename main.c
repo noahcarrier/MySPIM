@@ -13,14 +13,14 @@ Evan Agustin Verdu
 
 
 //Global Variables for registers (excluding temporary)
-int a0, a1, a2, a3;                 //Arguments      *
-int s0, s1, s2, s3, s4, s5, s6, s7; //Callees        *
-int zero = 0b0;                     //Zero register  *
-int v0, v1;                         //Funct results  *
-int gp;                             //Global pointer *
-int sp;                             //Stack pointer  *
-int fp;                             //Frame pointer  *
-int ra;                             //Return address *
+unsigned int a0, a1, a2, a3;                 //Arguments      *
+unsigned int s0, s1, s2, s3, s4, s5, s6, s7; //Callees        *
+unsigned int zero = 0b0;                     //Zero register  *
+unsigned int v0, v1;                         //Funct results  *
+unsigned int gp;                             //Global pointer *
+unsigned int sp;                             //Stack pointer  *
+unsigned int fp;                             //Frame pointer  *
+unsigned int ra;                             //Return address *
 //*****************************************************
 
 typedef struct
@@ -48,6 +48,7 @@ void printMem();             //Print all memory contents
 void step();                 //Step forward 1 instruction
 void contUntilHalt();        //Continue all instructions until halt
 void checkHalt();            //Check if program has halted
+
 int instruction_fetch(unsigned PC, unsigned *Mem, unsigned *instruction);
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1, unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec);
 int instruction_decode(unsigned op, struct_controls *controls);
@@ -63,6 +64,32 @@ void PC_update(unsigned jsec, unsigned extended_value, char Branch, char Jump, c
 //MAIN FUNCTION
 int main()
 {
-  printf("Hello, World!");
-  return 0;
+  unsigned int * Mem;
+
+  while(1)    //Control input switch-case
+  {
+
+    char control;
+    switch(control)
+    {
+      case 'r':
+        printReg();
+      case 'm':
+        printMem();
+      case 's':
+        step();
+      case 'c':
+        contUntilHalt();
+      case 'h':
+        checkHalt();
+      case 'x':
+        return 0;
+
+      default:
+        printf("\n\nERROR: Invalid control input, try again...\n");
+    }
+  }
+
+
+
 }
