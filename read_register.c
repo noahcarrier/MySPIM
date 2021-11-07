@@ -4,11 +4,11 @@
 /*
     Dictionary
    ***************************************
-   *    r1 -> target
-   *    r2 -> reading value
+   *    r1 -> source
+   *    r2 -> source
    *    Reg -> register array to be read
-   *    data1 -> array of some values
-   *    data2 -> array of some values
+   *    data1 -> register output
+   *    data2 -> register ouput
    ****************************************
 
 */
@@ -25,11 +25,6 @@ int main()
 
 void read_register(unsigned r1,unsigned r2,unsigned *Reg,unsigned *data1,unsigned *data2)
 {
-    for (int index = 0; index < 32; index++)
-    {
-        if (Reg[index] == data1[r1])
-        {
-            data2[r2] = Reg[index];
-        }
-    }
+    data1 = Reg[r1];
+    data2 = Reg[r2];
 }
