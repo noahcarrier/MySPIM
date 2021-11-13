@@ -13,7 +13,7 @@ int main()
 void sign_extend(unsigned offset,unsigned *extended_value)
 {
 
-//Figure out how to extend offset.
+//Figure out how to extend offset. Unless it is already extended.
 
 *extended_value = offset;
 }
