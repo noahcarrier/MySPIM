@@ -13,30 +13,20 @@ int main()
 void sign_extend(unsigned offset,unsigned *extended_value)
 {
     
-   int first;
-
-    first = offset;
+    int sign_bit;
     
-    while (first >= 10) // Finds the first number of offset
-    {
-        first = first / 10;
-    }    
+    sign_bit = (offset << 31);
     
-    if (first == 1)
+    if (sign_bit == 1)
     {
-         //Negative value
-         //add 2 bit strings (1111 1111 1111 1111 0000 0000 0000 0000 and offset)
-        
-        
+         offset = 0xFFFF0000 + offset;    
     }
-    else if (first == 0)
+    
+    else if (sign_bit == 0)
     {
-          //Positive value
-         //add 2 bit strings (0000 0000 0000 0000 0000 0000 0000 0000 and offset)
+
+         offset = 0x00000000 + offset;
     } 
     
-
-      
-
 *extended_value = offset;
 }
