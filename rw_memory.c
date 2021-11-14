@@ -16,11 +16,13 @@ int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsig
   if (MemWrite == 1)
     {
      *Mem = data2;
+     return 0;
     }
 
   else if (MemRead == 1) 
     {
      ALUresult = data2;
+     return 0;
     }
    
   else if (MemRead != 1 && MemWrite != 1)
