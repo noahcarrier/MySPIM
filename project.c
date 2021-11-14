@@ -76,7 +76,34 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
 /* 10 Points */
 int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
 {
+  unsigned address = ALUresult >> 2;
+   
+  if (MemWrite == 1)
+    {
+    if (ALUresult % 4 == 0)
+      {
+       Mem[address] = data2;
+      }
+    else
+       {
+       return 1;
+       }
+    }
 
+   
+  if (MemRead == 1) 
+    {
+    if (ALUresult % 4 == 0)
+      {
+       *memdata = Mem[address];
+      }
+     else
+        {
+        return 1;
+        }
+    }
+   
+ return 0;   
 }
 
 
