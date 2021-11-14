@@ -13,17 +13,34 @@ int main()
 
 int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
 {
+   
+  unsigned address = ALUresult >> 2;
+   
   if (MemWrite == 1)
     {
-     ALUresult = data2;
-     return 0;
+    if (ALUresult % 4 == 0)
+      {
+       Mem[address] = data2;
+      }
+    else
+       {
+       return 1;
+       }
     }
 
+   
   if (MemRead == 1) 
     {
-     *memdata = ALUresult;
-     return 0;
+    if (ALUresult % 4 == 0)
+      {
+       *memdata = Mem[address];
+      }
+     else
+        {
+        return 1;
+        }
     }
    
-  return 0;
+ return 0;   
 }
+
