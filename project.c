@@ -95,6 +95,18 @@ void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,
 /* 10 Points */
 void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char Zero,unsigned *PC)
 {
-
+  *PC = *PC + 4;
+  
+  if (Jump == 1)
+  {
+     *PC = (jsec << 2);
+  }
+  
+  
+  if (Branch == 1 && Zero == 1)
+  {
+     *PC = (extended_value << 2);
+  }
+    
 }
 
