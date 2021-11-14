@@ -20,7 +20,7 @@ int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsig
 
   else if (MemRead == 1) 
     {
-     *memdata = ALUresult;
+     ALUresult = data2;
     }
    
   else if (MemRead != 1 && MemWrite != 1)
