@@ -11,5 +11,9 @@ return 0;
 
 void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char Zero,unsigned *PC)
 {
-
+  PC = PC + 4;
+  
+ 
+  
+  
 }
