@@ -19,17 +19,11 @@ int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsig
      return 0;
     }
 
-  else if (MemRead == 1) 
+  if (MemRead == 1) 
     {
      *memdata = ALUresult;
      return 0;
     }
    
-  else if (MemRead != 1 && MemWrite != 1)
-    {
-    return 1;
-    }
-    
-  
-  
+  return 0;
 }
