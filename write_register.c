@@ -34,8 +34,8 @@ int main()
 void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,char RegWrite,char RegDst,char MemtoReg,unsigned *Reg)
 {
     if (RegWrite == "1" && MemtoReg == "1") //Data coming from memory
-        Reg[RegDst] = memdata;
+        Reg[RegDst/4] = memdata;
     
     if (RegWrite == "1" && MemtoReg == "0") //Data coming from ALU_result
-        Reg[RegDst] = ALUresult;
+        Reg[RegDst/4] = ALUresult;
 }
