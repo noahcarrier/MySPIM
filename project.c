@@ -56,7 +56,11 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 /* instruction fetch */
 int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 {
-
+   if (PC % 4 == 0)
+         *instruction = Mem[PC >> 2];
+      else
+         return 1;
+      return 0;
 }
 
 
@@ -65,7 +69,18 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 /* instruction partition */
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec)
 {
-
+   *op = (instruction >> 26) & 0xfc000000;
+    //
+    *r1 = (instruction >> 21) & 0x03e00000;
+    //
+    *r2 = (instruction >> 16) & 0x001f0000;
+    //
+    *r3 = (instruction >> 11) & 0x0000f800;
+    
+    //
+    *funct = instruction & 0x0000003F;
+    *offset = instruction & 0x0000FFFF;
+    *jsec = instruction & 0x03FFFFFF;
 }
 
 
@@ -75,7 +90,43 @@ void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsi
 /* instruction decode */
 int instruction_decode(unsigned op,struct_controls *controls)
 {
-
+   //Halts unused opcode if needed
+     int haltFlag = 0;
+     
+    switch (op)
+    {
+      case 0x0:
+         *controls = (struct_controls){ 1, 0, 0, 0, 0, 7, 0, 0, 1 };
+         break;
+      case 0x8:
+         *controls = (struct_controls){ 0, 0, 0, 0, 0, 0, 0, 1, 1 };
+         break;
+      case 0x23:
+         *controls = (struct_controls){ 0, 0, 0, 1, 1, 0, 0, 1, 1 };
+         break;
+      case 0x2b:
+         *controls = (struct_controls){ 0, 0, 0, 0, 0, 0, 1, 1, 0 };
+         break;
+      case 0xf:
+         *controls = (struct_controls){ 0, 0, 0, 0, 0, 6, 0, 1, 1 };
+         break;
+      case 0x4:
+         *controls = (struct_controls){ 2, 0, 1, 0, 2, 1, 0, 2, 0 };
+         break;
+      case 0xa:
+         *controls = (struct_controls){ 0, 0, 0, 0, 0, 2, 0, 1, 1 };
+         break;
+      case 0xb:
+         *controls = (struct_controls){ 0, 0, 0, 0, 0, 3, 0, 1, 1 };
+         break;
+      case 0x2:
+         *controls = (struct_controls){ 2, 1, 2, 0, 2, 0, 0, 2, 0 };
+         break;
+         
+      default:
+         return 1;
+    }
+    return 0;
 }
 
 
