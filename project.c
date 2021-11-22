@@ -9,43 +9,41 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
   switch (ALUControl)
   {
       case 0b000:
-         ALUresult = A + B;
+         *ALUresult = A + B;
          break;
       case 0b001:
-         ALUresult = A - B;
+         *ALUresult = A - B;
          break;
       case 0b010:
          if (A < B)
-            ALUresult = 1;
+            *ALUresult = 1;
          else
-            ALUresult = 0;
+            *ALUresult = 0;
          break;
       case 0b011:
          if (A < B)
-            ALUresult = 1;
+            *ALUresult = 1;
          else
-            ALUresult = 0;
+            *ALUresult = 0;
          break;
       case 0b100:
-         ALUresult = A & B;
+         *ALUresult = A & B;
          break;
       case 0b101:
-         ALUresult = A | B;
+         *ALUresult = A | B;
          break;
       case 0b110:
-         ALUresult = B << 16;
+         *ALUresult = B << 16;
          break;
       case 0b111:
-         ALUresult = !A;
+         *ALUresult = !A;
          break;
       case 0b1000:
-         ALUresult = A * B;
+         *ALUresult = A * B;
          break;
       case 0b1001:
-         ALUresult = A / B;
+         *ALUresult = A / B;
          break;
-      default:
-      //   halt_flag = 1;
   }
    if (ALUresult == 0)
       Zero = 1;
@@ -134,8 +132,8 @@ int instruction_decode(unsigned op,struct_controls *controls)
 /* Read Register */
 void read_register(unsigned r1,unsigned r2,unsigned *Reg,unsigned *data1,unsigned *data2)
 {
-    data1 = Reg[r1];
-    data2 = Reg[r2];
+   *data1 = Reg[r1/4];
+   *data2 = Reg[r2/4];
 }
 
 
@@ -184,7 +182,7 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
          ALUControl = 0b010;   //slt
          break;
       case 0b011:
-         ALUresult = 0b011;   //sltu
+         ALUControl = 0b011;   //sltu
          break;
       case 0b100:
          ALUControl = 0b100;  //and
@@ -267,10 +265,10 @@ int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsig
 /* Write Register */
 void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,char RegWrite,char RegDst,char MemtoReg,unsigned *Reg)
 {
-    if (RegWrite == "1" && MemtoReg == "1") //Data coming from memory
+    if (RegWrite == '1' && MemtoReg == '1') //Data coming from memory
         Reg[RegDst] = memdata;
     
-    if (RegWrite == "1" && MemtoReg == "0") //Data coming from ALU_result
+    if (RegWrite == '1' && MemtoReg == '0') //Data coming from ALU_result
         Reg[RegDst] = ALUresult;
 }
 
