@@ -46,7 +46,7 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
          break;
   }
    if (ALUresult == 0)
-      Zero = 1;
+      *Zero = 1;
 }
 
 
@@ -215,9 +215,9 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
    }
 
    if (ALUSrc == 0)
-      ALU(data1, data2, ALUControl, &ALUresult, &Zero);
+      ALU(data1, data2, ALUControl, ALUresult, Zero);
    if (ALUSrc == 1)
-      ALU(data1, extended_value, ALUControl, &ALUresult, &Zero);
+      ALU(data1, extended_value, ALUControl, ALUresult, Zero);
    
       if (halt_flag == 1)
          return 1;
