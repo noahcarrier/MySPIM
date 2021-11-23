@@ -62,3 +62,75 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
 }
 
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero);
+
+/*
+int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
+{
+    static int halt_flag = 0;
+
+    if(AluSrc == 1){
+      data2 = extended_value;
+    }
+
+    if (ALUOp == 7)
+       switch(funct) {
+      
+      case 0b000:
+         ALUOp = 0b000;   //addition or don't care
+         break;
+      case 0b001:
+         ALUOp = 0b001;  //sub
+         break;
+      case 0b0010:
+         ALUOp = 0b010;   //slt
+         break;
+      case 0b011:
+         ALUOp = 0b011;   //sltu
+         break;
+      case 0b100:
+         ALUOp = 0b100;  //and
+         break;
+      case 0b101:
+         ALUOp = 0b101;  //or
+         break;
+      case 0b110:
+         ALUOp = 0b110;  //shift extend left 16
+         break;
+      case 0b111:
+         ALUOp = 0b111; //Not
+      default:
+         halt_flag = 1;
+       }
+      ALU(data1,data2,ALUOp,ALUresult,Zero);
+   
+   }
+   
+   
+   else{
+     ALU(data1,data2,ALUOp,ALUresult,Zero);
+   }
+   
+   if (halt_flag == 1)
+         return 1;
+      else
+         return 0;
+}
+
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
