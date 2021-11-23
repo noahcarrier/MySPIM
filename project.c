@@ -146,14 +146,14 @@ void sign_extend(unsigned offset,unsigned *extended_value)
     
   if (sign_bit == 1)
   {
-    offset = 0xFFFF0000 + offset;   
+    offset = 0xFFFF0000 | offset;   
     *extended_value = offset;
   }
     
   else if (sign_bit == 0)
   {
 
-    offset = 0x00000000 + offset;
+    offset = 0x0000ffff & offset;
     *extended_value = offset;
   } 
     
