@@ -98,6 +98,7 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
          break;
       case 0b111:
          ALUOp = 0b111; //Not
+         break;
       default:
          halt_flag = 1;
        }
