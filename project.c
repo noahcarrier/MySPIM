@@ -164,12 +164,7 @@ void sign_extend(unsigned offset,unsigned *extended_value)
 /* ALU operations */
 int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
 {
-   int halt_flag = 0;
-
-   if (ALUSrc == 1)  //I-type
-      ALU(data1, extended_value, ALUOp, ALUresult, Zero);
-
-   else  //R-type, checking funct
+   if (ALUSrc == 0)
    {
       switch(funct)
       {
@@ -188,13 +183,21 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
          case 0b100100:
             ALUOp = 0b100;  //and
             break;
+         case 0b100101:
+            ALUOp = 0b101; //or
+            break;
          default:
-            halt_flag = 1;
+            return 1;
       }
-      ALU(data1,data2,ALUOp,ALUresult,Zero);
+      ALU(data1, extended_value, ALUOp, ALUresult, Zero);
    }
-   if (halt_flag == 1)
-      return 1;
+
+
+   
+   if (ALUSrc == 0)  //R-type
+      ALU(data1,data2,ALUOp,ALUresult,Zero);
+   
+
    
    return 0;
 }
