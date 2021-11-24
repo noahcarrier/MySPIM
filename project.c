@@ -8,36 +8,36 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
   switch (ALUControl)
   {
-      case 0b000: //add
+      case 1: //add
          *ALUresult = A + B;
          break;
-      case 0b001: //sub
+      case 2: //sub
          *ALUresult = A - B;
          break;
-      case 0b010: //slt
+      case 3: //slt
          if ((signed)A < (signed)B)
             *ALUresult = 1;
          else
             *ALUresult = 0;
          break;
-      case 0b011:   //sltu 
+      case 4:   //sltu 
          if (A < B)
             *ALUresult = 1;
          else
             *ALUresult = 0;
          break;   
-      case 0b100: //and
+      case 5: //and
          *ALUresult = A & B;
          break;
-      case 0b101: //or
+      case 6: //or
          *ALUresult = A | B;
          break;
-      case 0b110:
-         *ALUresult = B << 16;
+
+ 
          break;
-      case 0b111:
-         *ALUresult = !A;
-         break;
+
+     
+      
   }
    if (ALUresult == 0)
       *Zero = 1;
@@ -51,11 +51,10 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 /* instruction fetch */
 int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 {
-   if (PC % 4 == 0)
-         *instruction = Mem[PC >> 2];
-      else
-         return 1;
-      return 0;
+   if (PC > 65535 | PC & 0x3)
+      return 1;
+   *instruction = Mem[PC >> 2];
+   return 0;
 }
 
 
@@ -64,18 +63,19 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 /* instruction partition */
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec)
 {
-   *op = (instruction >> 26) & 0xfc000000;
-    //
-    *r1 = (instruction >> 21) & 0x03e00000;
-    //
-    *r2 = (instruction >> 16) & 0x001f0000;
-    //
-    *r3 = (instruction >> 11) & 0x0000f800;
-    
-    //
-    *funct = instruction & 0x0000003F;
-    *offset = instruction & 0x0000FFFF;
-    *jsec = instruction & 0x03FFFFFF;
+   *op = (instruction >> 26) & 0x0000003f; 
+
+    *r1 = (instruction >> 21) & 0x0000001f;
+
+    *r2 = (instruction >> 16) & 0x0000001f;
+
+    *r3 = (instruction >> 11) & 0x0000001f;
+
+    *funct = instruction & 0x0000003f;
+
+    *offset = instruction & 0X0000ffff;
+
+    *jsec = instruction & 0x03ffffff;
 }
 
 
@@ -164,38 +164,60 @@ void sign_extend(unsigned offset,unsigned *extended_value)
 /* ALU operations */
 int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
 {
-   if (ALUSrc == 0)
+
+   
+   switch (ALUOp)
    {
-      switch(funct)
-      {
-         case 0b100001:
-            ALUOp = 0b000;   //add
-            break;
-         case 0b100011:
-            ALUOp = 0b001;  //sub
-            break;
-         case 0b101010:
-            ALUOp = 0b010;   //slt
-            break;
-         case 0b101011:
-            ALUOp = 0b011;   //sltu
-            break;
-         case 0b100100:
-            ALUOp = 0b100;  //and
-            break;
-         case 0b100101:
-            ALUOp = 0b101; //or
-            break;
-         default:
-            return 1;
-      }
-      ALU(data1, extended_value, ALUOp, ALUresult, Zero);
+      case 0b001000:  //addi
+         ALUOp = 1;
+         break;
+      case 0b001001:   //addiu
+         ALUOp = 1;
+         break;
+      case 0b001010:   //slti
+         ALUOp = 3;
+         break;
+      case 0b001011:  //sltiu
+         ALUOp = 4;
+         break;
+      case 0b001100: //andi
+         ALUOp = 5;
+         break;
+      case 0b001101: //ori
+         ALUOp = 6;
+         break;
+         
+      case 0b000000: //r-type
+         switch(funct)
+         {         
+            case 0b100000: //add
+               ALUOp = 1;
+               break;
+         
+            case 0b100010: //sub
+               ALUOp = 2;
+               break;
+   
+            case 0b100100: //and
+               ALUOp = 5;
+               break;
+
+            case 0b100101: //or
+               ALUOp = 6;
+               break;
+         }
+         break;
+      default:
+         return 1;
    }
+   
 
 
    
-   if (ALUSrc == 0)  //R-type
-      ALU(data1,data2,ALUOp,ALUresult,Zero);
+   if (ALUSrc == 1)
+      ALU(data1, extended_value, ALUOp, ALUresult, Zero);
+   else if (ALUSrc == 0)
+      ALU(data1, data2, funct, ALUresult, Zero);
    
 
    
